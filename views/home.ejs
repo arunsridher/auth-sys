@@ -6,7 +6,7 @@
       <% } %>  
     </div>
     <div id="reset">
-      <button onclick="displayResetForm()">Reset Password</button>
+      <button id="reset-button">Reset Password</button>
     </div>
   </div>
   <div id="reset-form">
@@ -19,4 +19,10 @@
   </div>
 </div>
 
+<script>
+  document.getElementById("reset-button").onclick = function(){
+    console.log("ho");
+    document.getElementById("reset-form").style.display = "block";
+  }
+</script>
 

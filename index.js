@@ -21,6 +21,7 @@ const passport = require('passport');
 const passportLocal = require('./config/passport-local-strategy');
 
 const MongoStore = require('connect-mongo')(session);
+
 //middleware to parse form data
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
@@ -34,7 +35,8 @@ app.set('views', './views');
 
 //use express layouts
 app.use(expressLayouts);
-
+app.set('layout extractStyles', true);//extract styles from subpages into the layout
+app.set('layout extractScripts', true);//extract scripts from subpages into the layout
 app.use(session({
   name: 'Authentication System',
   secret: 'secret-key',
