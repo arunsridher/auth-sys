@@ -44,4 +44,22 @@ header{
   font-size: 1.2rem;
   white-space: nowrap;
 }
+
+@media only screen and (max-width: 800px) {
+  #logo a{
+    font-size: 2rem;
+    white-space: nowrap;
+  }
+  #nav ul li a{
+    font-size: 1rem;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  #logo a{
+    font-size: 2rem;
+    white-space: normal;
+  }
+}
+
 /* https://hookagency.com/website-color-schemes/ */
