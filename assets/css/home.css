@@ -1,0 +1,36 @@
+#home{
+  width: 100%;
+}
+
+#info{
+  width: 85%;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid white;
+  border-radius: 5px;
+}
+
+#name{
+  font-size: 2rem;
+  padding: 25px;
+  color: #303841;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+#reset button{
+  padding: 25px;
+  font-size: 1.5rem;
+  width: 250px;
+  line-height: 2rem;
+  font-family: 'Courier New', Courier, monospace;
+  border: 0;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+#reset-form input[type="submit"]{
+  width: 200px;
+}

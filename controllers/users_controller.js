@@ -25,7 +25,7 @@ module.exports.signIn = function(req, res){
 module.exports.createAccount = async function(req, res){
   try{
     if(req.body.password != req.body.confirm_password){
-      res.redirect('back');
+      return res.redirect('back');
     }  
     let user = await User.findOne({email: req.body.email});
     if(user){
@@ -81,4 +81,32 @@ module.exports.home = function(req, res){
   return res.render('home', {
     title: "Auth-Sys | Home"
   });
+}
+
+module.exports.updatePassword = async function(req, res){
+  try{
+    if(req.body.new_password != req.body.confirm_password){
+      console.log("passwords dont match");
+      return res.redirect('back');
+    }  
+    console.log(req.user.id);
+    let user = await User.findById(req.user.id);
+    if(user){
+      if(user.validPassword(req.body.old_password)){
+        user.setPassword(req.body.new_password);
+        await user.save();
+        console.log("password updated successfully")
+      }
+      else{
+        console.log("incorrect password");
+      }
+    }
+    else{
+      console.log("user not found");
+    }
+    return res.redirect('back');
+  }catch(err){
+    console.log(err);
+    return res.redirect('back');
+  }
 }

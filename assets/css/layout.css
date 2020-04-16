@@ -16,7 +16,7 @@ body{
   display: block;
   padding: 10px;
   width: 350px;
-  margin: 5px;
+  margin: 3px auto;
   color: #c89666;
   font-family: 'Courier New', Courier, monospace;
   font-weight: bold;
@@ -30,7 +30,6 @@ body{
 
 input[type="submit"]{
   width: 150px;
-  margin: auto;
   border: 0px;
   border-radius: 2px;
   background-color: #2d545e;

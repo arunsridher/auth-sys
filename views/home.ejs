@@ -1,4 +1,22 @@
-<% if(locals.user){ %>
-  <%= user.name %>
-<% } %>
+<div id="home">
+  <div id="info">
+    <div id="name">
+      <% if(locals.user){ %>
+        Welcome <%= user.name %>
+      <% } %>  
+    </div>
+    <div id="reset">
+      <button onclick="displayResetForm()">Reset Password</button>
+    </div>
+  </div>
+  <div id="reset-form">
+    <form class="form-style" action="/users/update-password" method="POST">
+      <input type="password" id="old-password" name="old_password" placeholder="Old Password" required>
+      <input type="password" id="new-password" name="new_password" placeholder="New Password" required>
+      <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm Password" required>
+      <input type="submit" value="Update Password">
+    </form>
+  </div>
+</div>
+
 
