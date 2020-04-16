@@ -39,3 +39,26 @@ module.exports.createAccount = async function(req, res){
     return res.redirect('back');
   }
 }
+
+module.exports.createSession = async function(req, res){
+  try{
+    let user = await User.findOne({email: req.body.email});
+    if(user){
+      if(user.validPassword(req.body.password)){
+        console.log("Login successful");
+        return res.redirect('back');
+      }
+      else{
+        console.log("Incorrect Username/Password");
+        return res.redirect('back');
+      }
+    }
+    else{
+      console.log("user doesn't exists");
+      return res.redirect('back');      
+    }
+  }catch(err){
+    console.log(err);
+    return res.redirect('back');
+  }
+}
