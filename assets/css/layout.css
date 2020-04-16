@@ -37,3 +37,47 @@ input[type="submit"]{
   font-size: 1rem;
   margin-top: 5px;
 }
+
+#forgot-password-link{
+  margin-top: -30px;
+}
+
+#forgot-password-link a{
+  text-decoration: none;
+  color: #303841;
+  font-weight: bold;
+}
+
+#forgot-password-container{
+  width: 60%;
+  margin: 15px auto;
+  text-align: center;
+  font-family: 'Courier New', Courier, monospace;
+  color: #303841;
+}
+
+#forgot-password-container h2{
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+#forgot-password-container form{
+  margin-top: 35px;
+}
+
+#forgot-password-container input[type="submit"]{
+  margin-top: 10px;
+}
+
+#reset-password-container{
+  width: 60%;
+  margin: 15px auto;
+  text-align: center;
+  font-family: 'Courier New', Courier, monospace;
+  color: #303841;
+}
+
+#reset-password-container input[type="submit"]{
+  margin-top: 10px;
+  width: 200px;
+}

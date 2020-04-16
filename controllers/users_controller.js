@@ -120,3 +120,23 @@ module.exports.updatePassword = async function(req, res){
     return res.redirect('back');
   }
 }
+
+module.exports.forgotPassword = function(req, res){
+  if(req.isAuthenticated()){
+    return res.redirect('home');
+  }
+  return res.render('forgot_password', {
+      title: "Auth-Sys | Forgot Password"
+  });
+}
+
+module.exports.sendPasswordResetLink = function(req, res){
+  req.flash('success', "Mail sent successfully");
+  return res.render('reset_password', {
+      title: "Auth-Sys | Reset Password"
+  });
+}
+
+module.exports.resetPassword = function(req, res){
+  
+}
