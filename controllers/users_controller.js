@@ -42,11 +42,10 @@ module.exports.createAccount = async function(req, res){
       user.setPassword(req.body.password);
       await user.save();
       req.flash('success', 'Account created successfully');
-      return res.render('user_sign_in', {
-        title: "Auth-Sys | SignIn"
-      }); 
+      return res.redirect('/users/sign-in'); 
     }
   }catch(err){
+    req.flash('error', 'Internal system error');
     console.log(err);
     return res.redirect('back');
   }
