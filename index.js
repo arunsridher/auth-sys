@@ -16,6 +16,11 @@ const db = require('./config/mongoose');
 //create express application
 const app = express();
 
+const session = require('express-session');
+const passport = require('passport');
+const passportLocal = require('./config/passport-local-strategy');
+
+const MongoStore = require('connect-mongo')(session);
 //middleware to parse form data
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
@@ -29,6 +34,30 @@ app.set('views', './views');
 
 //use express layouts
 app.use(expressLayouts);
+
+app.use(session({
+  name: 'Authentication System',
+  secret: 'secret-key',
+  saveUninitialized: false,
+  resave: false,
+  cookie: {
+      maxAge: (1000 * 60 * 100)
+  },
+  store: new MongoStore(
+      {
+          mongooseConnection: db,
+          autoRemove: 'disabled'
+      },
+      function(err){
+          console.log(err | 'connect-mongo setup ok');
+      }
+  )
+}));
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(passport.setAuthenticatedUser);
 
 //redirect all urls to routes index.js
 app.use('/', require('./routes'));
