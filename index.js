@@ -1,6 +1,9 @@
 //include express
 const express = require('express');
 
+//include express layouts
+const expressLayouts = require('express-ejs-layouts');
+
 //port on which the server should listen
 const port = 8000;
 
@@ -23,6 +26,9 @@ app.use(express.static('./assets'));
 //set view engine to ejs
 app.set('view engine', 'ejs');
 app.set('views', './views');
+
+//use express layouts
+app.use(expressLayouts);
 
 //redirect all urls to routes index.js
 app.use('/', require('./routes'));
