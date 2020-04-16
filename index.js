@@ -22,6 +22,8 @@ const passportLocal = require('./config/passport-local-strategy');
 
 const MongoStore = require('connect-mongo')(session);
 
+const flash = require('connect-flash');
+const customMware = require('./config/middleware');
 //middleware to parse form data
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
@@ -60,7 +62,8 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(passport.setAuthenticatedUser);
-
+app.use(flash());
+app.use(customMware.setFlash);
 //redirect all urls to routes index.js
 app.use('/', require('./routes'));
 

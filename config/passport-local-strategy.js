@@ -15,11 +15,13 @@ passport.use(new LocalStrategy({
   function (req, email, password, done) {
     User.findOne({ email: email }, function (err, user) {
       if (err) {
+        req.flash('error', 'Internal Server Error');
         console.log('Error in finding user --> Passport');
         return done(err);
       }
 
       if (!user || !user.validPassword(password)) {
+        req.flash('error', 'Inavlid username/password');
         console.log('Inavlid username/password')
         return done(null, false);
       }
