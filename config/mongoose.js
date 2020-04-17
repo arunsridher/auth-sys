@@ -1,8 +1,8 @@
 //include mongoose
 const mongoose = require('mongoose');
-
+const env = require('./environment');
 //connect to the authentication system database
-mongoose.connect("mongodb://localhost/auth-sys");
+mongoose.connect(`mongodb://localhost/${env.db}`);
 
 //check if connected to the database
 const db = mongoose.connection;

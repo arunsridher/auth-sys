@@ -1,11 +1,12 @@
 //include express
 const express = require('express');
+const env = require('./config/environment');
 
 //include express layouts
 const expressLayouts = require('express-ejs-layouts');
 
 //port on which the server should listen
-const port = 8000;
+const port = env.port;
 
 //include path module
 const path = require('path');
@@ -24,6 +25,7 @@ const MongoStore = require('connect-mongo')(session);
 
 const flash = require('connect-flash');
 const customMware = require('./config/middleware');
+
 //middleware to parse form data
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
@@ -41,7 +43,7 @@ app.set('layout extractStyles', true);//extract styles from subpages into the la
 app.set('layout extractScripts', true);//extract scripts from subpages into the layout
 app.use(session({
   name: 'Authentication System',
-  secret: 'secret-key',
+  secret: env.session_secret_key,
   saveUninitialized: false,
   resave: false,
   cookie: {
