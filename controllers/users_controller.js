@@ -7,6 +7,10 @@ const AccountVerificationToken = require('../models/accountVerificationTokens');
 const resetPasswordMailer = require('../mailers/reset_password_mailer');
 const accountVerificationMailer = require('../mailers/account_verification_mailer');
 
+const accVerEmailWorker = require('../workers/account_verification_email_worker');
+const resPwdEmailWorker = require('../workers/password_reset_email_worker');
+const queue = require('../config/kue');
+
 //file system and path libraries
 const fs = require('fs');
 const path = require('path');
@@ -24,7 +28,7 @@ module.exports.signUp = function (req, res) {
   }
   return res.render('user_sign_up', {
     title: "Auth-Sys | SignUp",
-    captcha : res.recaptcha
+    captcha: res.recaptcha
   });
 }
 
@@ -42,7 +46,7 @@ module.exports.signIn = function (req, res) {
 
 //create a new user account
 module.exports.createAccount = async function (req, res) {
-  console.log(req.body);
+  // console.log(req.body);
   try {
     //if passwords dont match
     if (req.body.password != req.body.confirm_password) {
@@ -72,10 +76,20 @@ module.exports.createAccount = async function (req, res) {
         accessToken: crypto.randomBytes(35).toString('hex'),
         isValid: true
       });
-  
+
       //populate it with users name and email and send it to him using mailer
       accountVerificationToken = await accountVerificationToken.populate('user', 'email name').execPopulate();
-      accountVerificationMailer.newAccountVerificationRequest(accountVerificationToken);
+      
+      // accountVerificationMailer.newAccountVerificationRequest(accountVerificationToken);
+      //add job to the queue using Kue
+      let job = queue.create('accountVerificationEmails', accountVerificationToken).save(function (err) {
+        if (err) {
+          console.log("error in creating a queue ", err);
+          return;
+        }
+
+        console.log(job.id + " enqueued");
+      });
 
       //if success
       req.flash('success', 'Check mail for account activation');
@@ -190,8 +204,17 @@ module.exports.createPasswordResetReq = async function (req, res) {
 
       //populate the token and send it through mailer
       resetPasswordToken = await resetPasswordToken.populate('user', 'email name').execPopulate();
-      resetPasswordMailer.newResetPwdReq(resetPasswordToken);
       
+      //resetPasswordMailer.newResetPwdReq(resetPasswordToken);
+      let job = queue.create('resetPasswordEmails', resetPasswordToken).save(function (err) {
+        if (err) {
+          console.log("error in creating a queue ", err);
+          return;
+        }
+
+        console.log(job.id + " enqueued");
+      });
+
       req.flash('success', 'Please check your email');
       return res.redirect('back');
     }
@@ -215,13 +238,13 @@ module.exports.resetPassword = async function (req, res) {
     console.log("resetPasswordToken ", resetPasswordToken);
     if (resetPasswordToken) {
       //check if the link hasn't expired
-      if(!isLinkTimedOut(resetPasswordToken.createdAt)){
+      if (!isLinkTimedOut(resetPasswordToken.createdAt)) {
         return res.render('reset_password', {
           title: "Ayth-Sys | Reset password",
           resetPasswordToken: resetPasswordToken
         });
       }
-      else{
+      else {
         //if link has expired
         console.log("Password link expired");
         req.flash('error', 'Password reset link expired');
@@ -279,26 +302,26 @@ module.exports.createNewPassword = async function (req, res) {
 }
 
 //activate an account
-module.exports.activateAccount = async function(req, res){
-  try{
+module.exports.activateAccount = async function (req, res) {
+  try {
     console.log("activate account ", req.query);
     let accountVerificationToken = await AccountVerificationToken.findOne({ accessToken: req.query.accessToken });
     //check if token exists and is valid
     if (accountVerificationToken && accountVerificationToken.isValid) {
       //set account to verified
-      let user = await User.findByIdAndUpdate(accountVerificationToken.user, {verified: true});
+      let user = await User.findByIdAndUpdate(accountVerificationToken.user, { verified: true });
       if (user) {
         console.log("Account activated Successfully");
         //deactivate the link
-        await AccountVerificationToken.findByIdAndUpdate(accountVerificationToken.id, {isValid: false});
+        await AccountVerificationToken.findByIdAndUpdate(accountVerificationToken.id, { isValid: false });
         req.flash('success', 'Account activated Successfully');
         return res.redirect('/users/sign-in');
       }
     }
     //if account already verified
-    else if(accountVerificationToken && !accountVerificationToken.isValid){
+    else if (accountVerificationToken && !accountVerificationToken.isValid) {
       let user = await User.findById(accountVerificationToken.user);
-      if(user && user.verified){
+      if (user && user.verified) {
         req.flash('error', 'Account already verified. Please Login');
         return res.redirect('/users/sign-in');
       }
@@ -311,11 +334,11 @@ module.exports.activateAccount = async function(req, res){
 }
 
 //helper function to check if the link has expired
-isLinkTimedOut = function(linkCreationTime){
+isLinkTimedOut = function (linkCreationTime) {
   linkCreationTime = new Date(linkCreationTime);
   linkCreationTime = linkCreationTime.getTime();
   let current = Date.now();
   let diff = current - linkCreationTime;
-  diff = diff/60000;
+  diff = diff / 60000;
   return diff > 30;
 }

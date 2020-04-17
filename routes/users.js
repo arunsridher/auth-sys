@@ -1,6 +1,7 @@
 //include express and create a router
 const express = require('express');
 const router = express.Router();
+const env = require('../config/environment');
 
 //include request library -> for recaptcha
 const request = require('request');
@@ -12,7 +13,6 @@ const recaptcha = new Recaptcha(env.site_key, env.secret_key);
 //passport to authenticate user during login
 const passport = require('passport');
 
-const env = require('../config/environment');
 const usersController = require('../controllers/users_controller');
 
 //middleware to verify recaptcha
