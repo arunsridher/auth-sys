@@ -167,11 +167,22 @@ module.exports.createPasswordResetReq = async function (req, res) {
 module.exports.resetPassword = async function (req, res) {
   try {
     let resetPasswordToken = await ResetPasswordToken.findOne({ accessToken: req.query.accessToken });
+    console.log("resetPasswordToken ", resetPasswordToken);
     if (resetPasswordToken) {
-      return res.render('reset_password', {
-        title: "Ayth-Sys | Reset password",
-        resetPasswordToken: resetPasswordToken
-      });
+      if(!isLinkTimedOut(resetPasswordToken.createdAt)){
+        return res.render('reset_password', {
+          title: "Ayth-Sys | Reset password",
+          resetPasswordToken: resetPasswordToken
+        });
+      }
+      else{
+        console.log("Password link expired");
+        req.flash('error', 'Password reset link expired');
+        return res.render('forgot_password', {
+          title: "Ayth-Sys | Reset password",
+          info: "Password reset link expired"
+        });
+      }
     }
     req.flash('error', 'Password reset link expired or wrong');
     return res.render('forgot_password', {
@@ -214,4 +225,13 @@ module.exports.createNewPassword = async function (req, res) {
     console.log(`Error:  ${err}`);
     return;
   }
+}
+
+isLinkTimedOut = function(linkCreationTime){
+  linkCreationTime = new Date(linkCreationTime);
+  linkCreationTime = linkCreationTime.getTime();
+  let current = Date.now();
+  let diff = current - linkCreationTime;
+  diff = diff/60000;
+  return diff > 30;
 }
