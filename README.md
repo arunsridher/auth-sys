@@ -21,7 +21,6 @@ You can find the task requirements [here](https://docs.google.com/document/d/1H2
   * Activate the account by clicking the link sent to you email
   * Sign in
   * Sign out / Reset password
-  * Reset password
 
 
 
