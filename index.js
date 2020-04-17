@@ -39,8 +39,11 @@ app.set('views', './views');
 
 //use express layouts
 app.use(expressLayouts);
-app.set('layout extractStyles', true);//extract styles from subpages into the layout
-app.set('layout extractScripts', true);//extract scripts from subpages into the layout
+
+//extract styles and scripts from subpages into the layout
+app.set('layout extractStyles', true);
+app.set('layout extractScripts', true);
+
 app.use(session({
   name: 'Authentication System',
   secret: env.session_secret_key,
@@ -60,12 +63,17 @@ app.use(session({
   )
 }));
 
-
+//initialize passport
 app.use(passport.initialize());
 app.use(passport.session());
+
+//custom middleware to set authenticated user in locals
 app.use(passport.setAuthenticatedUser);
+
+//for flash messages
 app.use(flash());
 app.use(customMware.setFlash);
+
 //redirect all urls to routes index.js
 app.use('/', require('./routes'));
 

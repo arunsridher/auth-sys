@@ -1,5 +1,7 @@
+//include file system library
 const fs = require('fs');
 
+//environment setup for development
 const development = {
   name: 'development',
   port: 8000,

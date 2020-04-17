@@ -1,3 +1,4 @@
+<!-- recaptcha script to be include for v3 -->
 <script src="https://www.google.com/recaptcha/api.js?render=6LfhWOoUAAAAAArhdysc_97jpb9-vzJkbNzO6mzj"></script>
 
 <form id="sign-up-form" class="form-style" action="/users/create" method="POST">
@@ -10,6 +11,7 @@
 </form>
 
 <script>
+  // this method gets the recaptcha token and assigns it to a input field
   grecaptcha.ready(function () {
     grecaptcha.execute('6LfhWOoUAAAAAArhdysc_97jpb9-vzJkbNzO6mzj', { action: '/users/create' }).then(function (token) {
       console.log(token);

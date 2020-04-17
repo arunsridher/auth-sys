@@ -14,18 +14,21 @@ passport.use(new LocalStrategy({
   },
   function (req, email, password, done) {
     User.findOne({ email: email }, function (err, user) {
+      //if error
       if (err) {
         req.flash('error', 'Internal Server Error');
         console.log('Error in finding user --> Passport');
         return done(err);
       }
 
+      //if user not found or password doesnt match
       if (!user || !user.validPassword(password)) {
         req.flash('error', 'Inavlid username/password');
         console.log('Inavlid username/password');
         return done(null, false);
       }
 
+      //if user found but account not verified
       if(user && !user.verified){
         req.flash('error', 'Please active your account to Login');
         console.log('Account not yet activated');
@@ -40,7 +43,7 @@ passport.use(new LocalStrategy({
   }
 ));
 
-// serializing the user to decide which is kept in the cookies
+// serializing the user to decide which values is kept in the cookies
 passport.serializeUser(function(user, done){
   done(null, user.id);
 });
@@ -68,7 +71,6 @@ passport.checkAuthentication = function(req, res, next){
 
 passport.setAuthenticatedUser = function(req, res, next){
   if(req.isAuthenticated()){
-      //req.user contains the current signed in user from the session cookie and we are just sending it to the locals for the views
       res.locals.user = req.user;
   }
   next();
