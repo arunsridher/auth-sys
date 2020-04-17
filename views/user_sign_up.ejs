@@ -2,14 +2,21 @@
 
 <form id="sign-up-form" class="form-style" action="/users/create" method="POST">
   <input type="text" id="name" name="name" placeholder="Your Name" required>
-  <input type="text" id="captcha" name="captcha">
   <input type="email" id="email" name="email" placeholder="Email" required>
   <input type="password" id="password" name="password" placeholder="Password" required>
   <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm password" required>
+  <input type="hidden" id="captcha" name="captcha">
   <input type="submit" value="Sign Up">
 </form>
 
 <script>
+  grecaptcha.ready(function () {
+    grecaptcha.execute('6LfhWOoUAAAAAArhdysc_97jpb9-vzJkbNzO6mzj', { action: '/users/create' }).then(function (token) {
+      console.log(token);
+      document.getElementById("captcha").value = token;
+    });
+  });
+  
   // document.getElementById("sign-up-form").addEventListener('submit', submitForm);
   // function submitForm(e){
   //   e.preventDefault();
@@ -38,10 +45,4 @@
   //     console.log(data);
   //   })
   // }
-  grecaptcha.ready(function() {
-      grecaptcha.execute('6LfhWOoUAAAAAArhdysc_97jpb9-vzJkbNzO6mzj', {action: '/users/create'}).then(function(token) {
-         console.log(token);
-         document.getElementById("captcha").value=token;
-      });
-  });
 </script>

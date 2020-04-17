@@ -40,21 +40,22 @@
 }
 
 @media only screen and (max-width: 800px) {
-  #name{
+  #user-name{
     font-size: 1.2rem;
   }
   #reset button{
     font-size: 1rem;
+    padding: 30px;
     width: 200px;
   }
 }
 
-@media only screen and (max-width: 600px) {
-  #name{
-    font-size: 1rem;
+@media only screen and (max-width: 550px) {
+  #user-name{
+    font-size: 1.1rem;
   }
   #reset button{
+    padding: 30px;
     font-size: 0.9rem;
-    width: 150px;
   }
 }
