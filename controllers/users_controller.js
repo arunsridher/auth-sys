@@ -54,7 +54,7 @@ module.exports.createAccount = async function (req, res) {
       await user.save();
 
       // send activation email
-      let accountVerificationToken = await ResetPasswordToken.create({
+      let accountVerificationToken = await AccountVerificationToken.create({
         user: user._id,
         accessToken: crypto.randomBytes(35).toString('hex'),
         isValid: true
@@ -235,6 +235,34 @@ module.exports.createNewPassword = async function (req, res) {
         title: "Ayth-Sys | Reset password",
         info: "Password reset link expired or wrong"
       });
+    }
+  } catch (err) {
+    req.flash('error', 'Internal Server Error');
+    console.log(`Error:  ${err}`);
+    return;
+  }
+}
+
+module.exports.activateAccount = async function(req, res){
+  try{
+    console.log("activate account ", req.query);
+    let accountVerificationToken = await AccountVerificationToken.findOne({ accessToken: req.query.accessToken });
+    if (accountVerificationToken && accountVerificationToken.isValid) {
+      let user = await User.findByIdAndUpdate(accountVerificationToken.user, {verified: true});
+      if (user) {
+        console.log("Account activated Successfully");
+        //deactivate the link
+        await AccountVerificationToken.findByIdAndUpdate(accountVerificationToken.id, {isValid: false});
+        req.flash('success', 'Account activated Successfully');
+        return res.redirect('/users/sign-in');
+      }
+    }
+    else if(accountVerificationToken && !accountVerificationToken.isValid){
+      let user = await User.findById(accountVerificationToken.user);
+      if(user && user.verified){
+        req.flash('error', 'Account already verified. Please Login');
+        return res.redirect('/users/sign-in');
+      }
     }
   } catch (err) {
     req.flash('error', 'Internal Server Error');

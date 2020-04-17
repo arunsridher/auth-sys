@@ -47,6 +47,6 @@ router.get('/forgot-password', usersController.forgotPassword);
 router.post('/create-password-reset-req', usersController.createPasswordResetReq);
 router.get('/reset-password', usersController.resetPassword);
 router.post('/create-new-password', usersController.createNewPassword);
-
+router.get('/activate-account', usersController.activateAccount)
 //export router
 module.exports = router;

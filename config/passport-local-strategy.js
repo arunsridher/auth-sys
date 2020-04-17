@@ -22,7 +22,13 @@ passport.use(new LocalStrategy({
 
       if (!user || !user.validPassword(password)) {
         req.flash('error', 'Inavlid username/password');
-        console.log('Inavlid username/password')
+        console.log('Inavlid username/password');
+        return done(null, false);
+      }
+
+      if(user && !user.verified){
+        req.flash('error', 'Please active your account to Login');
+        console.log('Account not yet activated');
         return done(null, false);
       }
 
