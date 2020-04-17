@@ -16,7 +16,4 @@ const development = {
     }
   }
 }
-
-console.log("environment ", process.env.SecretKey);
-console.log("environment ", process.env.AuthPass);
 module.exports = development;

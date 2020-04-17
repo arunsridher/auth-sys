@@ -147,26 +147,20 @@ module.exports.createPasswordResetReq = async function (req, res) {
       });
 
       resetPasswordToken = await resetPasswordToken.populate('user', 'email name').execPopulate();
-
       resetPasswordMailer.newResetPwdReq(resetPasswordToken);
+      
       req.flash('success', 'Please check your email');
-      return res.render('forgot_password', {
-        title: "Auth-Sys | Forgot Password",
-        info: "Please check your email for password reset instructions"
-      });
+      return res.redirect('back');
     }
     else {
       console.log('Error in finding user to reset password');
-      req.flash('error', 'Incorrect email id');
-      return res.render('forgot_password', {
-        title: "Auth-Sys | Forgot Password",
-        info: "Try again with a valid email address"
-      });
+      req.flash('error', 'Try again with a valid email address');
+      return res.redirect('back');
     }
   } catch (err) {
     req.flash('error', 'Internal Server Error');
     console.log(`Error:  ${err}`);
-    return;
+    return res.redirect('back');
   }
 }
 
