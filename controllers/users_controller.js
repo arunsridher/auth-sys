@@ -1,6 +1,8 @@
 const User = require('../models/user');
 const ResetPasswordToken = require('../models/resetPasswordTokens');
+const AccountVerificationToken = require('../models/accountVerificationTokens');
 const resetPasswordMailer = require('../mailers/reset_password_mailer');
+const accountVerificationMailer = require('../mailers/account_verification_mailer');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
@@ -47,9 +49,21 @@ module.exports.createAccount = async function (req, res) {
       user = new User();
       user.email = req.body.email;
       user.name = req.body.name;
+      user.verified = false;
       user.setPassword(req.body.password);
       await user.save();
-      req.flash('success', 'Account created successfully');
+
+      // send activation email
+      let accountVerificationToken = await ResetPasswordToken.create({
+        user: user._id,
+        accessToken: crypto.randomBytes(35).toString('hex'),
+        isValid: true
+      });
+  
+      accountVerificationToken = await accountVerificationToken.populate('user', 'email name').execPopulate();
+      accountVerificationMailer.newAccountVerificationRequest(accountVerificationToken);
+
+      req.flash('success', 'Check mail for account activation');
       return res.redirect('/users/sign-in');
     }
   } catch (err) {

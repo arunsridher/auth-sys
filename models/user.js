@@ -11,6 +11,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  verified: {
+    type: Boolean,
+    required: true
+  },
   hash:String,
   salt: String
 },{

@@ -1,0 +1,11 @@
+<div style="background-color: #EFEFEF; width: 100%; display: flex; flex-direction: column; align-items: center; padding: 25px;">
+  <div style="font-size: 24px; font-weight: bold; color: #2D545E; display: flex; flex-direction: row; justify-content: end; align-items: center; padding-right: 20px; text-align: right; padding-bottom: 35px; border-radius: 5px;">
+    <p>Auth System</p>
+  </div>
+  <div style="font-family: 'Courier New', Courier, monospace; font-size: 20px; font-weight: bold; background-color: #fafafa; color: #E1B382; padding: 25px;">
+    <p>Hi <%= accountVerificationToken.user.name %>!</p>
+    <p>Please click <a style="color: #303841;" href="http://localhost:8000/users/activate-account/?accessToken=<%= accountVerificationToken.accessToken %>">here</a> to activate your account</p>
+    <br>
+    <p>Thanks!</p>
+  </div>
+</div>
