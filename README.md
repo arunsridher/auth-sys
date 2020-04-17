@@ -14,7 +14,7 @@ You can find the task requirements [here](https://docs.google.com/document/d/1H2
   4. Run the application using the command "npm start"
 
 ## Base URL
-  [Click Here] (http://localhost:8000/)
+  [Click Here](http://localhost:8000/)
 
 ## Application flow
   * Create a new account by signing up
