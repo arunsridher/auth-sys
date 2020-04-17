@@ -5,6 +5,8 @@ const development = {
   port: 8000,
   session_secret_key: 'secret-key',
   db: 'auth-sys',
+  site_key: process.env.SiteKey,
+  secret_key: process.env.SecretKey,
   smtp: {
     service: 'gmail',
     host: "smtp.gmail.email",

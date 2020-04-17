@@ -1,7 +1,47 @@
-<form class="form-style" action="/users/create" method="POST">
+<script src="https://www.google.com/recaptcha/api.js?render=6LfhWOoUAAAAAArhdysc_97jpb9-vzJkbNzO6mzj"></script>
+
+<form id="sign-up-form" class="form-style" action="/users/create" method="POST">
   <input type="text" id="name" name="name" placeholder="Your Name" required>
+  <input type="text" id="captcha" name="captcha">
   <input type="email" id="email" name="email" placeholder="Email" required>
   <input type="password" id="password" name="password" placeholder="Password" required>
   <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm password" required>
   <input type="submit" value="Sign Up">
 </form>
+
+<script>
+  // document.getElementById("sign-up-form").addEventListener('submit', submitForm);
+  // function submitForm(e){
+  //   e.preventDefault();
+  //   const name = document.getElementById("name").value;
+  //   const email = document.getElementById("email").value;
+  //   const password = document.getElementById("password").value;
+  //   const confirm_password = document.getElementById("confirm_password").value;
+  //   const captcha = document.querySelector('#g-recaptcha-response').value;
+
+  //   fetch('/users/create',{
+  //     method: 'POST',
+  //     headers: {
+  //       'Accept': 'application/json, text/plain, */*',
+  //       'Content-type': 'application/json'
+  //     },
+  //     body: JSON.stringify({
+  //       name:name,
+  //       email: email,
+  //       password: password,
+  //       confirm_password: confirm_password,
+  //       captcha:captcha
+  //     })
+  //   })
+  //   .then((res) => res.json())
+  //   .then((data) => {
+  //     console.log(data);
+  //   })
+  // }
+  grecaptcha.ready(function() {
+      grecaptcha.execute('6LfhWOoUAAAAAArhdysc_97jpb9-vzJkbNzO6mzj', {action: '/users/create'}).then(function(token) {
+         console.log(token);
+         document.getElementById("captcha").value=token;
+      });
+  });
+</script>

@@ -13,7 +13,8 @@ module.exports.signUp = function (req, res) {
     return res.redirect('home');
   }
   return res.render('user_sign_up', {
-    title: "Auth-Sys | SignUp"
+    title: "Auth-Sys | SignUp",
+    captcha : res.recaptcha
   });
 }
 
@@ -30,6 +31,7 @@ module.exports.signIn = function (req, res) {
 }
 
 module.exports.createAccount = async function (req, res) {
+  console.log(req.body);
   try {
     if (req.body.password != req.body.confirm_password) {
       req.flash('error', 'Passwords dont match');
